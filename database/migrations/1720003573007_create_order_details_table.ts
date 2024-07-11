@@ -16,7 +16,6 @@ export default class extends BaseSchema {
       table.integer('number_product').notNullable()
       table.float('price').notNullable()
       table.boolean('is_deleted').defaultTo(false)
-
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

@@ -9,7 +9,6 @@ export default class extends BaseSchema {
       table.string('name', 255).notNullable()
       table.float('floor_price').notNullable()
       table.text('description').notNullable()
-      table.boolean('is_deleted').defaultTo(false)
       table.float('total_volume').notNullable()
       table
         .integer('category_id')
@@ -19,6 +18,7 @@ export default class extends BaseSchema {
         .onDelete('CASCADE')
       table.string('image_url', 255).notNullable()
       table.string('banner_url', 255).notNullable()
+      table.boolean('is_deleted').defaultTo(false)
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

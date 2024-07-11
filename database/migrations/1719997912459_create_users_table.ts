@@ -7,6 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.string('email', 255).notNullable().unique()
+      table.string('refresh_token', 255).nullable()
       table.boolean('is_deleted').defaultTo(false)
       table.timestamp('created_at')
       table.timestamp('updated_at')

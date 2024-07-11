@@ -9,6 +9,9 @@
 
 import { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
+import { middleware } from './kernel.js'
+
+const GoogleAuthsController = () => import('#modules/auth/google_auths.controller')
 
 router.get('/', (ctx: HttpContext) => {
   const { request, response } = ctx
@@ -20,3 +23,12 @@ router.get('/', (ctx: HttpContext) => {
   response.send('hello world')
   response.send({ hello: 'world' })
 })
+
+router.post('/auth/user/google', [GoogleAuthsController, 'googleAuth'])
+
+router
+  .get('/auth', async (ctx) => {
+    const user = ctx.auth.user!
+    return user
+  })
+  .use(middleware.auth({ guards: ['api'] }))
