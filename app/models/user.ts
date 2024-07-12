@@ -14,6 +14,9 @@ export default class User extends BaseModel {
   declare email: string
 
   @column()
+  declare walletBalance: number
+
+  @column()
   declare isDeleted: boolean
 
   @column()

@@ -13,6 +13,8 @@ import { middleware } from './kernel.js'
 
 const GoogleAuthsController = () => import('#modules/auth/google_auths.controller')
 
+const UsersController = () => import('#modules/user/users.controller')
+
 router.get('/', (ctx: HttpContext) => {
   const { request, response } = ctx
   console.log(request.url())
@@ -27,8 +29,7 @@ router.get('/', (ctx: HttpContext) => {
 router.post('/auth/user/google', [GoogleAuthsController, 'googleAuth'])
 
 router
-  .get('/auth', async (ctx) => {
-    const user = ctx.auth.user!
-    return user
+  .group(() => {
+    router.get('/user/profile', [UsersController, 'getProfile'])
   })
   .use(middleware.auth({ guards: ['api'] }))

@@ -36,8 +36,6 @@ export default class GoogleAuthsController {
 
     const data = await this.googleAuthsService.googleAuth(email)
 
-    return ctx.response.send({
-      data,
-    })
+    return ctx.response.send(data)
   }
 }
