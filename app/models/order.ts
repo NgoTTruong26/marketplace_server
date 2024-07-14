@@ -18,6 +18,9 @@ export default class Order extends BaseModel {
   declare isDeleted: boolean
 
   @column()
+  declare paymentMethod: string
+
+  @column()
   declare totalPrice: number
 
   @column.dateTime({ autoCreate: true })

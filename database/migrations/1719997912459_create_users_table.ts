@@ -1,5 +1,4 @@
 import { BaseSchema } from '@adonisjs/lucid/schema'
-
 export default class extends BaseSchema {
   protected tableName = 'users'
 
@@ -10,6 +9,7 @@ export default class extends BaseSchema {
       table.boolean('is_deleted').defaultTo(false)
       table.timestamp('created_at')
       table.timestamp('updated_at')
+      table.string('password').notNullable()
     })
   }
 

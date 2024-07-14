@@ -11,7 +11,8 @@
     "test": "node ace test",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "start:debug": "node --inspect -r ts-node/register ./ace serve --watch"
   },
   "imports": {
     "#controllers/*": "./app/controllers/*.js",
@@ -29,7 +30,8 @@
     "#database/*": "./database/*.js",
     "#start/*": "./start/*.js",
     "#tests/*": "./tests/*.js",
-    "#config/*": "./config/*.js"
+    "#config/*": "./config/*.js",
+    "#responses/*": "./app/responses/*.js"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^7.7.0",
@@ -56,6 +58,7 @@
     "@adonisjs/cors": "^2.2.1",
     "@adonisjs/lucid": "^21.1.0",
     "@vinejs/vine": "^2.1.0",
+    "cloudinary": "^2.2.0",
     "luxon": "^3.4.4",
     "pg": "^8.12.0",
     "reflect-metadata": "^0.2.2"
