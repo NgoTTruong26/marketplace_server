@@ -9,12 +9,16 @@
 
 import CategoriesController from '#controllers/categories_controller'
 import CollectionsController from '#controllers/collections_controller'
+import OrderDetailsController from '#controllers/order_details_controller'
+import OrdersController from '#controllers/orders_controller'
 import ProductsController from '#controllers/products_controller'
 import { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
-import OrdersController from '#controllers/orders_controller'
-import OrderDetailsController from '#controllers/order_details_controller'
+
+const GoogleAuthsController = () => import('#modules/auth/google_auths.controller')
+
+const UsersController = () => import('#modules/user/users.controller')
 
 router.get('/', (ctx: HttpContext) => {
   const { request, response } = ctx
@@ -61,3 +65,14 @@ router.resource('orders', OrdersController).apiOnly()
 
 //order_detail resource
 router.resource('order-details', OrderDetailsController).apiOnly()
+
+//google Auth
+router.post('/auth/user/google', [GoogleAuthsController, 'googleAuth'])
+
+//Middleware check auth
+router
+  .group(() => {
+    //Get user profile
+    router.get('/user/profile', [UsersController, 'getProfile'])
+  })
+  .use(middleware.auth({ guards: ['api'] }))
