@@ -17,8 +17,8 @@ import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
 
 const GoogleAuthsController = () => import('#modules/auth/google_auths.controller')
-
 const UsersController = () => import('#modules/user/users.controller')
+const UploadsController = () => import('#modules/upload/uploads.controller')
 
 router.get('/', (ctx: HttpContext) => {
   const { request, response } = ctx
@@ -68,6 +68,10 @@ router.resource('order-details', OrderDetailsController).apiOnly()
 
 //google Auth
 router.post('/auth/user/google', [GoogleAuthsController, 'googleAuth'])
+
+router.post('/upload/image', [UploadsController, 'uploadImage'])
+
+router.post('/upload/multiple-images', [UploadsController, 'uploadMultipleImages'])
 
 //Middleware check auth
 router
