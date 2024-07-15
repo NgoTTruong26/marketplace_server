@@ -8,7 +8,6 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string('name', 80).notNullable().unique()
       table.boolean('is_deleted').defaultTo(false)
-
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

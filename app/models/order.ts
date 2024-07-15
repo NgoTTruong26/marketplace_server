@@ -1,7 +1,7 @@
-import { DateTime } from 'luxon'
+import User from '#models/user'
 import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
-import User from '#models/user'
+import { DateTime } from 'luxon'
 import OrderDetail from './order_detail.js'
 
 export default class Order extends BaseModel {
@@ -15,13 +15,13 @@ export default class Order extends BaseModel {
   declare description: string
 
   @column()
-  declare isDeleted: boolean
-
-  @column()
   declare paymentMethod: string
 
   @column()
   declare totalPrice: number
+
+  @column()
+  declare isDeleted: boolean
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

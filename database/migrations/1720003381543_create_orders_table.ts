@@ -9,9 +9,8 @@ export default class extends BaseSchema {
       table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
       table.text('description').notNullable()
       table.string('payment_method', 255).notNullable()
-      table.boolean('is_deleted').defaultTo(false)
       table.float('total_price').notNullable()
-
+      table.boolean('is_deleted').defaultTo(false)
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

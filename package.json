@@ -60,6 +60,7 @@
     "@vinejs/vine": "^2.1.0",
     "cloudinary": "^2.2.0",
     "luxon": "^3.4.4",
+    "parse-duration": "^1.1.0",
     "pg": "^8.12.0",
     "reflect-metadata": "^0.2.2"
   },
