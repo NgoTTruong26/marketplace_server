@@ -1,9 +1,9 @@
 import HttpStatusCode from '#responses/HttpStatusCode'
-import OrderService from '#services/order_service'
 import { createOrderValidator } from '#validators/order'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import { errors } from '@adonisjs/lucid'
+import OrderService from './order.service.js'
 
 @inject()
 export default class OrdersController {

@@ -7,11 +7,11 @@
 |
 */
 
-import CategoriesController from '#controllers/categories_controller'
-import CollectionsController from '#controllers/collections_controller'
-import OrderDetailsController from '#controllers/order_details_controller'
-import OrdersController from '#controllers/orders_controller'
-import ProductsController from '#controllers/products_controller'
+import CategoriesController from '#modules/category/categories.controller'
+import CollectionsController from '#modules/collection/collections.controller'
+import OrdersController from '#modules/order/orders.controller'
+import OrderDetailsController from '#modules/order_detail/order_details.controller'
+import ProductsController from '#modules/product/products.controller'
 import { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'

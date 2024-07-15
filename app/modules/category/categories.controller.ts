@@ -1,8 +1,8 @@
-import { HttpContext } from '@adonisjs/core/http'
+import HttpStatusCode from '#responses/HttpStatusCode'
 import { createCategoriesValidator, validateParams } from '#validators/category'
 import { inject } from '@adonisjs/core'
-import CategoryService from '#services/category_service'
-import HttpStatusCode from '#responses/HttpStatusCode'
+import { HttpContext } from '@adonisjs/core/http'
+import CategoryService from './category.service.js'
 
 @inject()
 export default class CategoriesController {

@@ -1,13 +1,13 @@
-import CloudinaryService from '#services/CloudinaryService'
 import InvalidImageException from '#exceptions/invalid_image_exception'
 import HttpStatusCode from '#responses/HttpStatusCode'
-import CollectionsService from '#services/collection_service'
+import CloudinaryService from '#services/CloudinaryService'
 import { validateParams } from '#validators/category'
 import { createCollectionsValidator } from '#validators/collection'
 import ImageValidator from '#validators/image'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import { errors } from '@adonisjs/lucid'
+import CollectionsService from './collection.service.js'
 
 @inject()
 export default class CollectionsController {

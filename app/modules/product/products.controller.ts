@@ -1,13 +1,13 @@
 import InvalidImageException from '#exceptions/invalid_image_exception'
 import HttpStatusCode from '#responses/HttpStatusCode'
 import CloudinaryService from '#services/CloudinaryService'
-import ProductService from '#services/product_service'
 import { validateParams } from '#validators/category'
 import ImageValidator from '#validators/image'
 import { createProductValidator } from '#validators/product'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import { errors } from '@adonisjs/lucid'
+import ProductService from './product.service.js'
 
 @inject()
 export default class ProductsController {
