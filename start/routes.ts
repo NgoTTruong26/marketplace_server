@@ -73,6 +73,10 @@ router.post('/upload/image', [UploadsController, 'uploadImage'])
 
 router.post('/upload/multiple-images', [UploadsController, 'uploadMultipleImages'])
 
+router
+  .put('/user/update-profile', [UsersController, 'updateProfile'])
+  .use(middleware.validatorUpdateProfile())
+
 //Middleware check auth
 router
   .group(() => {

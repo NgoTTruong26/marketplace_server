@@ -8,6 +8,7 @@ export default class UploadsController {
   async uploadImage(ctx: HttpContext) {
     try {
       const { request, response } = ctx
+
       const file = request.file('image', {
         size: '2mb',
         extnames: ['jpg', 'png', 'jpeg'],
@@ -25,7 +26,7 @@ export default class UploadsController {
         allowed_formats: ['jpg', 'png', 'jpeg'],
       })
 
-      response.send({ message: 'Image uploaded successfully', url: cloudinayResponse.url })
+      response.send(cloudinayResponse.url)
     } catch (err) {
       throw new InvalidImageException()
     }
@@ -33,7 +34,7 @@ export default class UploadsController {
 
   async uploadMultipleImages(ctx: HttpContext) {
     const { request, response } = ctx
-    const files = request.files('images', {
+    const files = request.files('image', {
       size: '2mb',
       extnames: ['jpg', 'png', 'jpeg'],
     })
@@ -61,7 +62,7 @@ export default class UploadsController {
       const uploadResults = await Promise.all(uploadPromises)
       const imageUrls = uploadResults.map((uploadResult) => uploadResult.url)
 
-      response.send({ message: 'Images uploaded successfully', urls: imageUrls })
+      response.send({ urls: imageUrls })
     } catch (err) {
       throw new InvalidImageException()
     }
