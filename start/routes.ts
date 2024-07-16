@@ -69,10 +69,6 @@ router.resource('order-details', OrderDetailsController).apiOnly()
 //google Auth
 router.post('/auth/user/google', [GoogleAuthsController, 'googleAuth'])
 
-router.post('/upload/image', [UploadsController, 'uploadImage'])
-
-router.post('/upload/multiple-images', [UploadsController, 'uploadMultipleImages'])
-
 //Middleware check auth
 router
   .group(() => {
@@ -81,9 +77,11 @@ router
       .group(() => {
         router.get('profile', [UsersController, 'getProfile'])
         router
-          .put('update-profile', [UsersController, 'updateProfile'])
+          .patch('profile', [UsersController, 'updateProfile'])
           .use(middleware.validatorUpdateProfile())
       })
       .prefix('user')
+    router.post('/upload/image', [UploadsController, 'uploadImage'])
+    router.post('/upload/multiple-images', [UploadsController, 'uploadMultipleImages'])
   })
   .use(middleware.auth({ guards: ['api'] }))

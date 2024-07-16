@@ -19,6 +19,6 @@ export default class UsersController {
     const user = ctx.auth.user?.serialize()
     const newProfile = await this.usersService.updateProfile(user?.id, ctx.body)
 
-    ctx.response.send({ ...user, profile: newProfile })
+    ctx.response.send(newProfile)
   }
 }
