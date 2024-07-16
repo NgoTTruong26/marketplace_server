@@ -17,8 +17,8 @@ export default class UsersController {
 
   async updateProfile(ctx: HttpContext<UpdateProfileDTO>) {
     const user = ctx.auth.user?.serialize()
-    await this.usersService.updateProfile(user?.id, ctx.body)
+    const newProfile = await this.usersService.updateProfile(user?.id, ctx.body)
 
-    ctx.response.send({ profile: ctx.body })
+    ctx.response.send({ ...user, profile: newProfile })
   }
 }

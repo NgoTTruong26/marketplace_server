@@ -73,14 +73,17 @@ router.post('/upload/image', [UploadsController, 'uploadImage'])
 
 router.post('/upload/multiple-images', [UploadsController, 'uploadMultipleImages'])
 
-router
-  .put('/user/update-profile', [UsersController, 'updateProfile'])
-  .use(middleware.validatorUpdateProfile())
-
 //Middleware check auth
 router
   .group(() => {
     //Get user profile
-    router.get('/user/profile', [UsersController, 'getProfile'])
+    router
+      .group(() => {
+        router.get('profile', [UsersController, 'getProfile'])
+        router
+          .put('update-profile', [UsersController, 'updateProfile'])
+          .use(middleware.validatorUpdateProfile())
+      })
+      .prefix('user')
   })
   .use(middleware.auth({ guards: ['api'] }))
