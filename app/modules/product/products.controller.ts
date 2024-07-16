@@ -49,7 +49,7 @@ export default class ProductsController {
       if (!productImage || productImage.tmpPath === undefined || productImage.tmpPath === null) {
         throw new InvalidImageException()
       }
-      console.log(productImage.size)
+      // console.log(productImage.size)
 
       if (
         !this.imageValidator.checkImageType(productImage) ||

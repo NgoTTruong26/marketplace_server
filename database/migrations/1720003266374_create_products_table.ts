@@ -16,7 +16,7 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('collections')
         .onDelete('CASCADE')
-      table.string('image_url', 255).notNullable()
+      table.string('image_url', 255).notNullable().defaultTo('')
       table.boolean('is_deleted').defaultTo(false)
       table.timestamp('created_at')
       table.timestamp('updated_at')

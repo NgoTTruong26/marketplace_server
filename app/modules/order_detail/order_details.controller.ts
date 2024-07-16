@@ -54,7 +54,7 @@ export default class OrderDetailsController {
   /**
    * Show individual record
    */
-  async show(ctx: HttpContext) {}
+  // async show(ctx: HttpContext) {}
 
   /**
    * Handle form submission for the edit action
@@ -84,5 +84,5 @@ export default class OrderDetailsController {
   /**
    * Delete record
    */
-  async destroy(ctx: HttpContext) {}
+  // async destroy(ctx: HttpContext) {}
 }
