@@ -51,6 +51,10 @@ router
     match: /^[0-9]+$/,
     cast: (value) => Number(value),
   })
+router.get('collections/infor-user/:id', [CollectionsController, 'getInforUser']).where('id', {
+  match: /^[0-9]+$/,
+  cast: (value) => Number(value),
+})
 
 //Products resource
 router.resource('products', ProductsController).except(['index']).apiOnly()

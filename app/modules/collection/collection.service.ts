@@ -1,4 +1,5 @@
 import Collection from '#models/collection'
+import db from '@adonisjs/lucid/services/db'
 
 export default class CollectionsService {
   async createCollection(data: any) {
@@ -38,5 +39,12 @@ export default class CollectionsService {
     collection.merge(data)
     await collection.save()
     return collection
+  }
+  async getUser(collectionId: number) {
+    const result = await db.rawQuery(
+      'SELECT DISTINCT p.* FROM users u join collections c on u.id = c.created_by_user_id join profiles p on u.id = p.user_id where c.id = ?',
+      [collectionId]
+    )
+    return result.rows
   }
 }

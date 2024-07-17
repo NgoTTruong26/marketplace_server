@@ -38,4 +38,7 @@ export default await Env.create(new URL('../', import.meta.url), {
   // secret key for google
   GOOGLE_CLIENT_ID: Env.schema.string(),
   GOOGLE_CLIENT_SECRET: Env.schema.string(),
+
+  // secret key for jwt
+  SECRET_KEY: Env.schema.string(),
 })

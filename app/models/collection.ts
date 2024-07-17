@@ -3,6 +3,7 @@ import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import Category from '#models/category'
 import Product from '#models/product'
+import User from '#models/user'
 
 export default class Collection extends BaseModel {
   @column({ isPrimary: true })
@@ -40,6 +41,9 @@ export default class Collection extends BaseModel {
 
   @belongsTo(() => Category)
   declare category: BelongsTo<typeof Category>
+
+  @belongsTo(() => User)
+  declare user: BelongsTo<typeof User>
 
   @hasMany(() => Product)
   declare products: HasMany<typeof Product>

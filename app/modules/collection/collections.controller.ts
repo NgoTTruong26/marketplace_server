@@ -211,4 +211,16 @@ export default class CollectionsController {
       }
     }
   }
+  async getInforUser(ctx: HttpContext) {
+    try {
+      const data = await this.collectionService.getUser(ctx.params.id)
+      ctx.response.status(200).send({
+        data: data,
+      })
+    } catch (error) {
+      ctx.response.status(HttpStatusCode.NOT_FOUND).send({
+        message: 'GET USER FAILED',
+      })
+    }
+  }
 }

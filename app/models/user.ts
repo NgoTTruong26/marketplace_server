@@ -5,6 +5,8 @@ import { BaseModel, column, hasMany, hasOne } from '@adonisjs/lucid/orm'
 import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
 import parseDuration from 'parse-duration'
+import Collection from '#models/collection'
+import env from '#start/env'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -34,9 +36,12 @@ export default class User extends BaseModel {
   @hasMany(() => Order)
   declare orders: HasMany<typeof Order>
 
+  @hasMany(() => Collection)
+  declare collections: HasMany<typeof Collection>
+
   static accessTokens = JwtAccessTokenProvider.forModel(User, {
     expiresInMillis: parseDuration('1 day')!,
-    key: new JwtSecret('BjBZ-s9JFJTBwUsOo1Ml-fzkCqja_byX'),
+    key: new JwtSecret(env.get('SECRET_KEY')),
     primaryKey: 'id',
     algorithm: 'HS256',
     audience: 'http://localhost:5173',
