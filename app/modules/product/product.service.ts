@@ -20,7 +20,7 @@ export default class ProductService {
       .andWhere((builder) => {
         builder.where('name', 'like', `%${keyword}%`).orWhere('description', 'like', `%${keyword}%`)
       })
-      .orderBy('price', 'asc')
+      .orderBy('id', 'asc')
       .paginate(page, limit)
   }
 

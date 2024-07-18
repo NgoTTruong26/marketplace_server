@@ -7,8 +7,6 @@
 |
 */
 
-import CategoriesController from '#modules/category/categories.controller'
-import CollectionsController from '#modules/collection/collections.controller'
 import OrdersController from '#modules/order/orders.controller'
 import OrderDetailsController from '#modules/order_detail/order_details.controller'
 import ProductsController from '#modules/product/products.controller'
@@ -19,6 +17,8 @@ import { middleware } from './kernel.js'
 const GoogleAuthsController = () => import('#modules/auth/google_auths.controller')
 const UsersController = () => import('#modules/user/users.controller')
 const UploadsController = () => import('#modules/upload/uploads.controller')
+const CategoriesController = () => import('#modules/category/categories.controller')
+const CollectionsController = () => import('#modules/collection/collections.controller')
 
 router.get('/', (ctx: HttpContext) => {
   const { request, response } = ctx
@@ -40,11 +40,14 @@ router.get('/', (ctx: HttpContext) => {
 // })
 
 //Categories resource
-router.resource('categories', CategoriesController).apiOnly()
+router.post('/categories', [CategoriesController, 'store'])
+router.get('/categories', [CategoriesController, 'index'])
 
 //Collections resource
-router.resource('collections', CollectionsController).except(['index']).apiOnly()
 router.get('collections', [CollectionsController, 'index']).use(middleware.pagination())
+router
+  .get('/top-collections', [CollectionsController, 'getTopCollections'])
+  .use(middleware.pagination())
 router
   .put('collections/upload-image/:id', [CollectionsController, 'uploadCollectionImage'])
   .where('id', {

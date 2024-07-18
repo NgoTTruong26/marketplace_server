@@ -22,12 +22,7 @@ export default class CollectionsController {
     try {
       const data = await this.collectionService.getAllCollections(ctx.pagination)
       console.log(ctx.pagination)
-      ctx.response.status(HttpStatusCode.OK).send({
-        message: 'List of collections',
-        page: data.currentPage,
-        perPage: data.all().length,
-        data: data.all(),
-      })
+      ctx.response.status(HttpStatusCode.OK).send(data)
     } catch (error) {
       if (error instanceof errors.E_ROW_NOT_FOUND) {
         ctx.response.status(HttpStatusCode.NOT_FOUND).send({
@@ -41,6 +36,24 @@ export default class CollectionsController {
   /**
    * Handle form submission for the create action
    */
+  async getTopCollections(ctx: HttpContext) {
+    try {
+      const data = await this.collectionService.getTopCollections(ctx.pagination)
+
+      return ctx.response.status(HttpStatusCode.OK).send({
+        message: 'List of top collections',
+        data: data,
+      })
+    } catch (error) {
+      if (error instanceof errors.E_ROW_NOT_FOUND) {
+        ctx.response.status(HttpStatusCode.NOT_FOUND).send({
+          message: 'GET COLLECTIONS FAILED',
+          error: 'Collections not found',
+        })
+      }
+    }
+  }
+
   async store({ request, response }: HttpContext) {
     try {
       const fileBanner = request.file('banner')

@@ -1,8 +1,16 @@
 import Collection from '#models/collection'
+import { Pagination } from '../../types/pagination.js'
 
 export default class CollectionsService {
   async createCollection(data: any) {
     return Collection.create(data)
+  }
+
+  async getTopCollections(data: Pagination) {
+    return await Collection.query()
+      .preload('profile')
+      .orderBy('totalVolume', 'desc')
+      .limit(data.limit)
   }
 
   async getAllCollections(data: any) {
@@ -12,6 +20,7 @@ export default class CollectionsService {
       .andWhere((builder) => {
         builder.where('name', 'like', `%${keyword}%`).orWhere('description', 'like', `%${keyword}%`)
       })
+      .orderBy('id', 'asc')
       .paginate(page, limit)
   }
 

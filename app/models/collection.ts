@@ -1,8 +1,10 @@
-import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
-import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import Category from '#models/category'
 import Product from '#models/product'
+
+import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
+import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
+import { DateTime } from 'luxon'
+import Profile from './profile.js'
 
 export default class Collection extends BaseModel {
   @column({ isPrimary: true })
@@ -23,8 +25,11 @@ export default class Collection extends BaseModel {
   @column()
   declare totalVolume: number
 
-  @column()
+  @column({ columnName: 'category_id' })
   declare categoryId: number
+
+  @column({ columnName: 'profile_id' })
+  declare profileId: number
 
   @column()
   declare imageUrl: string
@@ -40,6 +45,9 @@ export default class Collection extends BaseModel {
 
   @belongsTo(() => Category)
   declare category: BelongsTo<typeof Category>
+
+  @belongsTo(() => Profile)
+  declare profile: BelongsTo<typeof Profile>
 
   @hasMany(() => Product)
   declare products: HasMany<typeof Product>

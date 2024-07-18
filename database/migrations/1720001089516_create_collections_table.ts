@@ -11,6 +11,13 @@ export default class extends BaseSchema {
       table.text('description').notNullable()
       table.float('total_volume').notNullable()
       table
+        .integer('profile_id')
+        .unsigned()
+        .notNullable()
+        .references('id')
+        .inTable('profiles')
+        .onDelete('CASCADE')
+      table
         .integer('category_id')
         .unsigned()
         .references('id')

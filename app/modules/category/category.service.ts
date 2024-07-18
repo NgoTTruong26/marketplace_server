@@ -2,11 +2,31 @@ import Category from '#models/category'
 
 export default class CategoryService {
   async createCategory(data: any) {
-    return Category.create(data)
+    //return Category.create(data)
+    return Category.createMany([
+      {
+        name: 'art',
+      },
+      {
+        name: 'gaming',
+      },
+      {
+        name: 'memberships',
+      },
+      {
+        name: 'PFPs',
+      },
+      {
+        name: 'photography',
+      },
+      {
+        name: 'music',
+      },
+    ])
   }
 
   async getAllCatrgories() {
-    return Category.all()
+    return Category.query().orderBy('id', 'asc')
   }
 
   async getCategoryById(id: number) {
