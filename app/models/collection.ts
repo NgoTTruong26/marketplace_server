@@ -28,6 +28,9 @@ export default class Collection extends BaseModel {
   declare categoryId: number
 
   @column()
+  declare createdByUserId: number
+
+  @column()
   declare imageUrl: string
 
   @column()

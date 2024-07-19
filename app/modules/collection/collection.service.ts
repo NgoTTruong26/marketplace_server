@@ -47,4 +47,13 @@ export default class CollectionsService {
     )
     return result.rows
   }
+
+  async getCollectionByUserId(userId: number) {
+    const result = await db.rawQuery(
+      'SELECT * FROM collections WHERE created_by_user_id = ? AND is_deleted = false',
+      [userId]
+    )
+
+    return result.rows
+  }
 }

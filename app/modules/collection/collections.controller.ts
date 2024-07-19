@@ -8,6 +8,7 @@ import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import { errors } from '@adonisjs/lucid'
 import CollectionsService from './collection.service.js'
+import {CollectionResponse} from "../../types/response/collection.response.js";
 
 @inject()
 export default class CollectionsController {
@@ -81,7 +82,7 @@ export default class CollectionsController {
         data: data,
       })
     } catch (error) {
-      // console.log(error)
+      console.log(error)
       response.status(HttpStatusCode.BAD_REQUEST).send({
         messages: 'INSERT COLLECTIONS FAILED',
         error: error.messages,
@@ -220,6 +221,27 @@ export default class CollectionsController {
     } catch (error) {
       ctx.response.status(HttpStatusCode.NOT_FOUND).send({
         message: 'GET USER FAILED',
+      })
+    }
+  }
+
+  async getCollectionByUserId(ctx: HttpContext) {
+    try {
+      const listCollections = await this.collectionService.getCollectionByUserId(ctx.params.id)
+
+      const resultData = listCollections.map((collection: CollectionResponse) => ({
+        id: collection.id,
+        name: collection.name,
+      }))
+      // console.log(listCollections)
+      // console.log(ctx.params.id)
+      ctx.response.status(HttpStatusCode.OK).send({
+        message: 'Success',
+        data: resultData,
+      })
+    } catch (error) {
+      ctx.response.status(HttpStatusCode.NOT_FOUND).send({
+        message: 'Collections not found',
       })
     }
   }

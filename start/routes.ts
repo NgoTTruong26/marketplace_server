@@ -55,6 +55,10 @@ router.get('collections/infor-user/:id', [CollectionsController, 'getInforUser']
   match: /^[0-9]+$/,
   cast: (value) => Number(value),
 })
+router.get('collections/users/:id', [CollectionsController, 'getCollectionByUserId']).where('id', {
+  match: /^[0-9]+$/,
+  cast: (value) => Number(value),
+})
 
 //Products resource
 router.resource('products', ProductsController).except(['index']).apiOnly()
