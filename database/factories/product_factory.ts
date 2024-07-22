@@ -9,7 +9,7 @@ export const ProductFactory = factory
       price: faker.commerce.price(),
       isDeleted: false,
       quantity: faker.number.int(2000), // faker.random.number(1000, 10000
-      collection_id: faker.number.int({ min: 1, max: 6 }), // Randomly select collection_id from 1 to 6
+      collection_id: faker.number.int({ min: 109, max: 111 }), // Randomly select collection_id from 1 to 6
       imageUrl: '',
     }
   })

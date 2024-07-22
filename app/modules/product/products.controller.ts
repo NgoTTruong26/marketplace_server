@@ -189,4 +189,19 @@ export default class ProductsController {
       }
     }
   }
+
+  async getProductCreatedByUser(ctx: HttpContext) {
+    try {
+      const listProduct = await this.productService.getProductCreatedByUser(ctx.params.id)
+
+      ctx.response.status(HttpStatusCode.OK).send({
+        message: 'successful',
+        products: listProduct,
+      })
+    } catch (error) {
+      ctx.response.status(HttpStatusCode.BAD_REQUEST).send({
+        message: 'Product not found',
+      })
+    }
+  }
 }

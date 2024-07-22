@@ -30,4 +30,15 @@ export default class OrderService {
     await OrderDetail.createMany(listOrderDetail)
     return order
   }
+  async getOrderByUserId(userId: number) {
+    return Order.query().where('userId', userId).andWhere('isDeleted', false)
+  }
+
+  async getProductIsBuyed(userID: number) {
+    const listOrder = await this.getOrderByUserId(userID)
+    const orderIds = listOrder.map((order: any) => order.id)
+    const listOrderDetail = await OrderDetail.query().whereIn('orderId', orderIds)
+    const productIds = listOrderDetail.map((orderDetail: any) => orderDetail.productId)
+    return Product.query().whereIn('id', productIds)
+  }
 }

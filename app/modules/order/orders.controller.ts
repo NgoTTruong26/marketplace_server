@@ -4,6 +4,7 @@ import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import { errors } from '@adonisjs/lucid'
 import OrderService from './order.service.js'
+import { messages } from '@vinejs/vine/defaults'
 
 @inject()
 export default class OrdersController {
@@ -41,6 +42,20 @@ export default class OrdersController {
           error: error.messages,
         })
       }
+    }
+  }
+
+  async getProductIsBuyedByUser(ctx: HttpContext) {
+    try {
+      const listProducts = await this.orderService.getProductIsBuyed(ctx.params.id)
+      ctx.response.status(HttpStatusCode.OK).send({
+        message: 'successful',
+        data: listProducts,
+      })
+    } catch (error) {
+      ctx.response.status(HttpStatusCode.BAD_REQUEST).send({
+        message: 'Cannot get product is buyed by user',
+      })
     }
   }
 

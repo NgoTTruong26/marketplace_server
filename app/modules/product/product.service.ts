@@ -1,4 +1,5 @@
 import Product from '#models/product'
+import db from '@adonisjs/lucid/services/db'
 
 export default class ProductService {
   async getAllProducts(data: any) {
@@ -45,5 +46,18 @@ export default class ProductService {
     product.merge(data)
     await product.save()
     return product
+  }
+
+  async getProductCreatedByUser(userId: number) {
+    const result = await db.rawQuery(
+      'SELECT * FROM collections WHERE created_by_user_id = ? AND is_deleted = false',
+      [userId]
+    )
+
+    const collectionIds = result.rows.map((collection: any) => collection.id)
+    const products = await Product.query()
+      .whereIn('collectionId', collectionIds)
+      .andWhere('isDeleted', false)
+    return products
   }
 }

@@ -10,6 +10,7 @@ export const CollectionFactory = factory
       isDeleted: false,
       totalVolume: faker.number.int({ min: 2000, max: 10000 }),
       categoryId: faker.number.int({ min: 1, max: 6 }),
+      createdByUserId: 1,
     }
   })
   .build()

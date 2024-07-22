@@ -8,7 +8,6 @@ import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import { errors } from '@adonisjs/lucid'
 import CollectionsService from './collection.service.js'
-import {CollectionResponse} from "../../types/response/collection.response.js";
 
 @inject()
 export default class CollectionsController {
@@ -50,11 +49,10 @@ export default class CollectionsController {
 
       if (
         !fileImage ||
-        fileImage.tmpPath == null ||
-        fileImage.tmpPath == undefined ||
+        fileImage.tmpPath === null ||
         !fileBanner ||
-        fileBanner.tmpPath == null ||
-        fileBanner.tmpPath == undefined
+        fileBanner.tmpPath === null ||
+        fileBanner.tmpPath === undefined
       ) {
         throw new InvalidImageException('Invalid file path')
       }
@@ -174,11 +172,11 @@ export default class CollectionsController {
 
       if (
         !fileImage ||
-        fileImage.tmpPath == null ||
-        fileImage.tmpPath == undefined ||
+        fileImage.tmpPath === null ||
+        fileImage.tmpPath === undefined ||
         !fileBanner ||
-        fileBanner.tmpPath == null ||
-        fileBanner.tmpPath == undefined
+        fileBanner.tmpPath === null ||
+        fileBanner.tmpPath === undefined
       ) {
         throw new InvalidImageException('Invalid file path')
       }
@@ -229,15 +227,11 @@ export default class CollectionsController {
     try {
       const listCollections = await this.collectionService.getCollectionByUserId(ctx.params.id)
 
-      const resultData = listCollections.map((collection: CollectionResponse) => ({
-        id: collection.id,
-        name: collection.name,
-      }))
       // console.log(listCollections)
       // console.log(ctx.params.id)
       ctx.response.status(HttpStatusCode.OK).send({
         message: 'Success',
-        data: resultData,
+        collections: listCollections,
       })
     } catch (error) {
       ctx.response.status(HttpStatusCode.NOT_FOUND).send({

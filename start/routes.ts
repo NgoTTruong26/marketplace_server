@@ -68,8 +68,20 @@ router.put('products/upload-image/:id', [ProductsController, 'uploadProductImage
   cast: (value) => Number(value),
 })
 
+router.get('/products/users/:id', [ProductsController, 'getProductCreatedByUser']).where('id', {
+  match: /^[0-9]+$/,
+  cast: (value) => Number(value),
+})
+
 //Order resource
 router.resource('orders', OrdersController).apiOnly()
+
+router
+  .get('/orders/users/products/:id', [OrdersController, 'getProductIsBuyedByUser'])
+  .where('id', {
+    match: /^[0-9]+$/,
+    cast: (value) => Number(value),
+  })
 
 //order_detail resource
 router.resource('order-details', OrderDetailsController).apiOnly()
