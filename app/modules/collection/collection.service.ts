@@ -25,7 +25,7 @@ export default class CollectionsService {
   }
 
   async getCollectionById(id: number) {
-    return Collection.query().where('id', id).andWhere('isDeleted', false).firstOrFail()
+    return Collection.query().where('id', id).andWhere('isDeleted', false).preload("profile").firstOrFail()
   }
 
   async deleteCollection(id: number) {

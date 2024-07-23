@@ -9,8 +9,9 @@ export const ProductFactory = factory
       price: Number(faker.commerce.price()),
       isDeleted: false,
       quantity: faker.number.int(2000), // faker.random.number(1000, 10000
-      collectionId: faker.number.int({ min: 1, max: 6 }), // Randomly select collection_id from 1 to 6
-      imageUrl: '',
+      collectionId: faker.number.int({ min: 4, max: 23 }), // Randomly select collection_id from 1 to 6
+      imageUrl:
+        'https://i.seadn.io/s/raw/files/43445c33ca9a539dbc18f39f89c4550c.jpg?auto=format&dpr=1&w=384',
     }
   })
   .build()

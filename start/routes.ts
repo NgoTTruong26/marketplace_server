@@ -19,6 +19,7 @@ const UsersController = () => import('#modules/user/users.controller')
 const UploadsController = () => import('#modules/upload/uploads.controller')
 const CategoriesController = () => import('#modules/category/categories.controller')
 const CollectionsController = () => import('#modules/collection/collections.controller')
+const CartsController = () => import('#modules/cart/carts.controller')
 
 router.get('/', (ctx: HttpContext) => {
   const { request, response } = ctx
@@ -45,6 +46,7 @@ router.get('/categories', [CategoriesController, 'index'])
 
 //Collections resource
 router.get('collections', [CollectionsController, 'index']).use(middleware.pagination())
+router.get('collections/:id', [CollectionsController, 'show'])
 router
   .get('/top-collections', [CollectionsController, 'getTopCollections'])
   .use(middleware.pagination())
@@ -84,6 +86,15 @@ router
           .use(middleware.validatorUpdateProfile())
       })
       .prefix('user')
+    router
+      .group(() => {
+        router.get('', [CartsController, 'getCart'])
+        router.post('', [CartsController, 'addProductToCart'])
+        router.delete('', [CartsController, 'removeProductFromCart'])
+      })
+      .prefix('cart')
+    router.get('products-from-cart', [ProductsController, 'getProductsFromCart'])
+
     router.post('/upload/image', [UploadsController, 'uploadImage'])
     router.post('/upload/multiple-images', [UploadsController, 'uploadMultipleImages'])
   })

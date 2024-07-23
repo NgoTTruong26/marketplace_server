@@ -1,7 +1,8 @@
 import Collection from '#models/collection'
-import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
-import type { HasMany } from '@adonisjs/lucid/types/relations'
+import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
+import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
+import User from './user.js'
 
 export default class Profile extends BaseModel {
   @column({ isPrimary: true })
@@ -33,4 +34,7 @@ export default class Profile extends BaseModel {
 
   @hasMany(() => Collection)
   declare collections: HasMany<typeof Collection>
+
+  @belongsTo(() => User)
+  declare user: BelongsTo<typeof User>
 }

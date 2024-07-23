@@ -109,7 +109,6 @@ export default class CollectionsController {
       const id = await validateParams.validate(params.id)
       console.log(id)
       const data = await this.collectionService.getCollectionById(id)
-      console.log(data)
 
       response.status(HttpStatusCode.OK).send({
         messages: 'Success',

@@ -9,10 +9,22 @@ import UsersService from './user.service.js'
 export default class UsersController {
   constructor(private usersService: UsersService) {}
   async getProfile(ctx: HttpContext) {
-    const user = ctx.auth.user?.serialize()
-    const profile = await this.usersService.getProfile(user?.id)
+    const user = ctx.auth.user
+    await user?.load('cart', (builder) =>
+      builder.withCount('products', (query) => {
+        query.as('totalProducts')
+      })
+    )
 
-    ctx.response.send({ ...user, profile })
+    const totalProducts = Number(user?.cart?.$extras.totalProducts)
+
+    const profile = await this.usersService.getProfile(user!.id)
+
+    ctx.response.send({
+      ...user?.serialize(),
+      cart: { ...user?.cart.serialize(), totalProducts },
+      profile,
+    })
   }
 
   async updateProfile(ctx: HttpContext<UpdateProfileDTO>) {

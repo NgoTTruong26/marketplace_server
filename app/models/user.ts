@@ -5,6 +5,7 @@ import { BaseModel, column, hasMany, hasOne } from '@adonisjs/lucid/orm'
 import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
 import parseDuration from 'parse-duration'
+import Cart from './cart.js'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -30,6 +31,9 @@ export default class User extends BaseModel {
 
   @hasOne(() => Profile)
   declare profile: HasOne<typeof Profile>
+
+  @hasOne(() => Cart)
+  declare cart: HasOne<typeof Cart>
 
   @hasMany(() => Order)
   declare orders: HasMany<typeof Order>

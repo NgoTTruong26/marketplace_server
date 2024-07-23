@@ -1,4 +1,5 @@
 import User from '#models/user'
+import db from '@adonisjs/lucid/services/db'
 import IGoogleAuth from './types/GoogleAuth.type.js'
 
 export default class GoogleAuthsService {
@@ -11,17 +12,29 @@ export default class GoogleAuthsService {
 
       return { user, accessToken: accessToken }
     } else {
-      const newUser = await User.create({
-        email,
+      const data = await db.transaction(async (trx) => {
+        const newUser = await User.create(
+          {
+            email,
+          },
+          { client: trx }
+        )
+
+        await newUser.related('profile').create(
+          {
+            username: email.split('@')[0],
+          },
+          { client: trx }
+        )
+
+        await newUser.related('cart').create({}, { client: trx })
+
+        return newUser
       })
 
-      await newUser.related('profile').create({
-        username: email.split('@')[0],
-      })
+      const accessToken = (await User.accessTokens.create(data)).value?.release() || ''
 
-      const accessToken = (await User.accessTokens.create(newUser)).value?.release() || ''
-
-      return { user: newUser, accessToken }
+      return { user: data, accessToken }
     }
   }
 }

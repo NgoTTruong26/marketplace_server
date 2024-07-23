@@ -7,6 +7,8 @@ import { createProductValidator } from '#validators/product'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import { errors } from '@adonisjs/lucid'
+import { GetProductListDto } from './dto/get_product_list.dto.js'
+import { GetProductListFromCartDto } from './dto/get_product_list_from_cart.dto.js'
 import ProductService from './product.service.js'
 
 @inject()
@@ -22,16 +24,40 @@ export default class ProductsController {
   async index(ctx: HttpContext) {
     try {
       const { page, limit } = ctx.pagination
-      console.log(page, limit)
-      const listProducts = await this.productService.getAllProducts(ctx.pagination)
+      const collectionId = (ctx.request.qs() as GetProductListDto).collectionId
+      if (!Number(collectionId)) {
+        throw new Error()
+      }
 
-      ctx.response.status(HttpStatusCode.OK).send({
-        message: 'List of products',
-        page: listProducts.currentPage,
-        perPage: listProducts.all().length,
-        product: listProducts.all(),
+      console.log(page, limit)
+      const listProducts = await this.productService.getAllProducts({
+        collectionId,
+        ...ctx.pagination,
       })
+
+      ctx.response.status(HttpStatusCode.OK).send(listProducts)
     } catch (error) {
+      ctx.response.status(HttpStatusCode.BAD_REQUEST).send({
+        message: 'Product not found',
+      })
+    }
+  }
+
+  async getProductsFromCart(ctx: HttpContext) {
+    try {
+      const cartId = (ctx.request.qs() as GetProductListFromCartDto).cartId
+      if (!Number(cartId)) {
+        throw new Error()
+      }
+
+      const listProducts = await this.productService.getProductsFromCart({
+        cartId,
+      })
+
+      ctx.response.status(HttpStatusCode.OK).send({ data: listProducts })
+    } catch (error) {
+      console.log(error)
+
       ctx.response.status(HttpStatusCode.BAD_REQUEST).send({
         message: 'Product not found',
       })
