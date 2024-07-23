@@ -50,6 +50,7 @@ export default class CollectionsController {
       if (
         !fileImage ||
         fileImage.tmpPath === null ||
+        fileImage.tmpPath === undefined ||
         !fileBanner ||
         fileBanner.tmpPath === null ||
         fileBanner.tmpPath === undefined
