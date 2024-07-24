@@ -24,7 +24,6 @@ export default class OrdersController {
     try {
       const orderDTO = await createOrderValidator.validate(ctx.request.all())
 
-      // console.log(orderDTO)
       const order = await this.orderService.createOrder(orderDTO)
       ctx.response.status(HttpStatusCode.CREATED).send({
         message: 'Order created',

@@ -23,13 +23,11 @@ export default class ProductsController {
    */
   async index(ctx: HttpContext) {
     try {
-      const { page, limit } = ctx.pagination
       const collectionId = (ctx.request.qs() as GetProductListDto).collectionId
       if (!Number(collectionId)) {
         throw new Error()
       }
 
-      console.log(page, limit)
       const listProducts = await this.productService.getAllProducts({
         collectionId,
         ...ctx.pagination,
@@ -56,8 +54,6 @@ export default class ProductsController {
 
       ctx.response.status(HttpStatusCode.OK).send({ data: listProducts })
     } catch (error) {
-      console.log(error)
-
       ctx.response.status(HttpStatusCode.BAD_REQUEST).send({
         message: 'Product not found',
       })
@@ -75,7 +71,6 @@ export default class ProductsController {
       if (!productImage || productImage.tmpPath === undefined || productImage.tmpPath === null) {
         throw new InvalidImageException()
       }
-      // console.log(productImage.size)
 
       if (
         !this.imageValidator.checkImageType(productImage) ||
@@ -151,7 +146,6 @@ export default class ProductsController {
           error: 'Product not found',
         })
       } else {
-        console.log(error)
         ctx.response.status(HttpStatusCode.BAD_REQUEST).send({
           message: 'UPDATE PRODUCT FAILED',
           error: error.messages,

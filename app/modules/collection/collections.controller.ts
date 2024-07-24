@@ -21,7 +21,6 @@ export default class CollectionsController {
   async index(ctx: HttpContext) {
     try {
       const data = await this.collectionService.getAllCollections(ctx.pagination)
-      console.log(ctx.pagination)
       ctx.response.status(HttpStatusCode.OK).send(data)
     } catch (error) {
       if (error instanceof errors.E_ROW_NOT_FOUND) {
@@ -58,7 +57,6 @@ export default class CollectionsController {
     try {
       const fileBanner = request.file('banner')
       const fileImage = request.file('images')
-      // console.log(fileBanner)
 
       if (
         !fileImage ||
@@ -82,7 +80,7 @@ export default class CollectionsController {
       const resultImage = await CloudinaryService.upload(fileImage.tmpPath)
       const resultBanner = await CloudinaryService.upload(fileBanner.tmpPath)
       const payload = await createCollectionsValidator.validate(request.all())
-      // console.log(payload)
+
       const data = await this.collectionService.createCollection({
         ...payload,
         image_url: resultImage.url,
@@ -94,7 +92,6 @@ export default class CollectionsController {
         data: data,
       })
     } catch (error) {
-      // console.log(error)
       response.status(HttpStatusCode.BAD_REQUEST).send({
         messages: 'INSERT COLLECTIONS FAILED',
         error: error.messages,
@@ -107,7 +104,7 @@ export default class CollectionsController {
   async show({ params, response }: HttpContext) {
     try {
       const id = await validateParams.validate(params.id)
-      console.log(id)
+
       const data = await this.collectionService.getCollectionById(id)
 
       response.status(HttpStatusCode.OK).send({
@@ -181,7 +178,6 @@ export default class CollectionsController {
     try {
       const fileBanner = request.file('banner')
       const fileImage = request.file('images')
-      // console.log(fileBanner)
 
       if (
         !fileImage ||

@@ -81,6 +81,7 @@ router
     router
       .group(() => {
         router.get('profile', [UsersController, 'getProfile'])
+        router.patch('recharge', [UsersController, 'recharge'])
         router
           .patch('profile', [UsersController, 'updateProfile'])
           .use(middleware.validatorUpdateProfile())
@@ -90,6 +91,7 @@ router
       .group(() => {
         router.get('', [CartsController, 'getCart'])
         router.post('', [CartsController, 'addProductToCart'])
+        router.patch('/change-quantity-product', [CartsController, 'changeQuantityProductFromCart'])
         router.delete('', [CartsController, 'removeProductFromCart'])
       })
       .prefix('cart')

@@ -1,38 +1,27 @@
 import Cart from '#models/cart'
 import CartProduct from '#models/cartProducts'
-import db from '@adonisjs/lucid/services/db'
 import { AddProductToCartDto } from './dto/add_product_to_cart.dto.js'
+import { ChangeQuantityProductFromCartDto } from './dto/change_quantity_product_from_cart.dto.js'
 import { GetCartDto } from './dto/get_cart.dto.js'
 import { RemoveProductFromCartDto } from './dto/remove_product_from_cart.dto.js'
 
 export default class CartService {
-  async addProductToCart(userId: number, data: AddProductToCartDto) {
-    const cart = await Cart.findByOrFail('user_id', userId)
-
-    const productExists = await db
-      .query()
-      .from('cart_products')
-      .where({
-        cart_id: cart.id,
-        product_id: data.productId,
-      })
-      .first()
-
-    if (productExists) {
-      throw new Error('Product already exists in cart')
-    }
-
-    await db.table('cart_products').insert({
-      cart_id: cart.id,
-      product_id: data.productId,
+  async addProductToCart({ cartId, productId, quantity }: AddProductToCartDto) {
+    const cartProduct = await CartProduct.findBy({
+      cartId,
+      productId,
     })
 
-    return cart
+    if (!cartProduct) {
+      return await CartProduct.create({
+        cartId,
+        productId,
+        quantity: quantity || 1,
+      })
+    }
   }
 
   async removeProductFromCart({ cartId, productId }: RemoveProductFromCartDto) {
-    console.log(cartId, productId)
-
     const cartProduct = await CartProduct.query()
       .where({
         cartId,
@@ -41,6 +30,23 @@ export default class CartService {
       .delete()
 
     return cartProduct
+  }
+
+  async changeQuantityProductFromCart({
+    cartId,
+    productId,
+    quantity,
+  }: ChangeQuantityProductFromCartDto) {
+    const cartProduct = await CartProduct.findByOrFail({
+      cartId,
+      productId,
+    })
+
+    if (!cartProduct) {
+      throw new Error('Cannot find cart or product')
+    }
+
+    return await cartProduct.merge({ quantity }).save()
   }
 
   async getCart(data: GetCartDto) {

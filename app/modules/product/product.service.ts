@@ -7,7 +7,6 @@ import { GetProductListFromCartDto } from './dto/get_product_list_from_cart.dto.
 export default class ProductService {
   async getAllProducts(data: any) {
     const { page, limit, keyword, sort, collectionId } = data
-    console.log(sort)
     if (sort === '-price') {
       return await Product.query()
         .where('isDeleted', false)

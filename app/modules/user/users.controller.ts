@@ -33,4 +33,12 @@ export default class UsersController {
 
     ctx.response.send(newProfile)
   }
+
+  async recharge(ctx: HttpContext) {
+    const user = await this.usersService.recharge(ctx.auth.user!.id, {
+      money: ctx.request.body().money,
+    })
+
+    ctx.response.send(user)
+  }
 }

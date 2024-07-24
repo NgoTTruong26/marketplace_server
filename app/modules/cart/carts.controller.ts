@@ -11,8 +11,10 @@ export default class CartsController {
 
   async addProductToCart(ctx: HttpContext) {
     try {
-      const data = await this.cartService.addProductToCart(ctx.auth.user!.id, {
+      const data = await this.cartService.addProductToCart({
+        cartId: ctx.request.body().cartId,
         productId: ctx.request.body().productId,
+        quantity: ctx.request.body().quantity,
       })
       ctx.response.status(HttpStatusCode.CREATED).send({
         message: 'Add product to cart successfully',
@@ -44,6 +46,25 @@ export default class CartsController {
     }
   }
 
+  async changeQuantityProductFromCart(ctx: HttpContext) {
+    try {
+      const data = await this.cartService.changeQuantityProductFromCart({
+        productId: ctx.request.body().productId,
+        cartId: ctx.request.body().cartId,
+        quantity: ctx.request.body().quantity,
+      })
+      ctx.response.status(HttpStatusCode.CREATED).send({
+        message: 'Update quantity product successfully',
+        data: data,
+      })
+    } catch (error) {
+      ctx.response.status(HttpStatusCode.BAD_REQUEST).send({
+        message: error.message,
+        error: error.messages,
+      })
+    }
+  }
+
   async getCart(ctx: HttpContext) {
     try {
       const data = await this.cartService.getCart({ userId: ctx.auth.user!.id, ...ctx.pagination })
@@ -53,8 +74,6 @@ export default class CartsController {
         data: data,
       })
     } catch (error) {
-      console.log(error)
-
       ctx.response.status(HttpStatusCode.BAD_REQUEST).send({
         message: 'FAILED',
         error: error.messages,

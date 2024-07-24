@@ -11,8 +11,6 @@ export default class ValidatorException extends Exception {
   }
 
   async handle(error: this, ctx: HttpContext) {
-    console.log(ValidatorException.messages)
-
     ctx.response.status(error.status).send({
       messages: ValidatorException.messages,
     })

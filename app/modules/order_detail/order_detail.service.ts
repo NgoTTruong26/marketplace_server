@@ -7,7 +7,7 @@ export default class OrderDetailService {
     const { order_id, product_id, price, number_product } = data
 
     const order = await Order.findOrFail(order_id)
-    console.log(order)
+
     const product = await Product.findOrFail(product_id)
     const orderDetail = new OrderDetail()
     orderDetail.orderId = order.id

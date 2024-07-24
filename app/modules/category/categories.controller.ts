@@ -27,8 +27,6 @@ export default class CategoriesController {
    * Handle form submission for the create action
    */
   async store({ request, response }: HttpContext) {
-    console.log(request.all())
-
     try {
       const payload = await createCategoriesValidator.validate(request.all())
 
@@ -94,7 +92,6 @@ export default class CategoriesController {
    * Delete record
    */
   async destroy({ response, params }: HttpContext) {
-    console.log(params.id)
     return response.send(`Delete category with ID ${params.id}`)
   }
 }
