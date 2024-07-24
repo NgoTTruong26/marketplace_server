@@ -59,6 +59,16 @@ router.get('collections/users/:id', [CollectionsController, 'getCollectionByUser
   match: /^[0-9]+$/,
   cast: (value) => Number(value),
 })
+router
+  .delete('users/:userId/collections/:id', [CollectionsController, 'deleteCollectionByUser'])
+  .where('id', {
+    match: /^[0-9]+$/,
+    cast: (value) => Number(value),
+  })
+  .where('userId', {
+    match: /^[0-9]+$/,
+    cast: (value) => Number(value),
+  })
 
 //Products resource
 router.resource('products', ProductsController).except(['index']).apiOnly()
@@ -82,6 +92,11 @@ router
     match: /^[0-9]+$/,
     cast: (value) => Number(value),
   })
+
+router.get('/orders/users/:id', [OrdersController, 'getOrderByUser']).where('id', {
+  match: /^[0-9]+$/,
+  cast: (value) => Number(value),
+})
 
 //order_detail resource
 router.resource('order-details', OrderDetailsController).apiOnly()

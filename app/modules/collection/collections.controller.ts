@@ -240,4 +240,16 @@ export default class CollectionsController {
       })
     }
   }
+  async deleteCollectionByUser(ctx: HttpContext) {
+    try {
+      await this.collectionService.deleteCollectionByUser(ctx.params.userId, ctx.params.id)
+      ctx.response.status(HttpStatusCode.OK).send({
+        message: 'Deleted successfully',
+      })
+    } catch (error) {
+      ctx.response.status(HttpStatusCode.NOT_FOUND).send({
+        message: 'Delete failed',
+      })
+    }
+  }
 }

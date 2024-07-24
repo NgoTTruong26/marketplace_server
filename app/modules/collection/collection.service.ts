@@ -56,4 +56,21 @@ export default class CollectionsService {
 
     return result.rows
   }
+
+  async deleteCollectionByUser(userId: number, collectionId: number) {
+    const collection = await Collection.query()
+      .where('id', collectionId)
+      .andWhere('created_by_user_id', userId)
+      .andWhere('isDeleted', false)
+      .firstOrFail()
+
+    collection.isDeleted = true
+    await collection.save()
+
+    const products = await collection.related('products').query().where('isDeleted', false)
+    for (const product of products) {
+      product.isDeleted = true
+      await product.save()
+    }
+  }
 }
