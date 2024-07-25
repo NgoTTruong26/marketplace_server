@@ -7,7 +7,6 @@
 |
 */
 
-import OrdersController from '#modules/order/orders.controller'
 import OrderDetailsController from '#modules/order_detail/order_details.controller'
 import ProductsController from '#modules/product/products.controller'
 import { HttpContext } from '@adonisjs/core/http'
@@ -20,6 +19,7 @@ const UploadsController = () => import('#modules/upload/uploads.controller')
 const CategoriesController = () => import('#modules/category/categories.controller')
 const CollectionsController = () => import('#modules/collection/collections.controller')
 const CartsController = () => import('#modules/cart/carts.controller')
+const OrdersController = () => import('#modules/order/orders.controller')
 
 router.get('/', (ctx: HttpContext) => {
   const { request, response } = ctx
@@ -65,9 +65,6 @@ router.put('products/upload-image/:id', [ProductsController, 'uploadProductImage
   cast: (value) => Number(value),
 })
 
-//Order resource
-router.resource('orders', OrdersController).apiOnly()
-
 //order_detail resource
 router.resource('order-details', OrderDetailsController).apiOnly()
 
@@ -96,6 +93,8 @@ router
       })
       .prefix('cart')
     router.get('products-from-cart', [ProductsController, 'getProductsFromCart'])
+
+    router.post('/order', [OrdersController, 'store'])
 
     router.post('/upload/image', [UploadsController, 'uploadImage'])
     router.post('/upload/multiple-images', [UploadsController, 'uploadMultipleImages'])

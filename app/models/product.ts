@@ -5,6 +5,7 @@ import { DateTime } from 'luxon'
 import Cart from './cart.js'
 import CartProduct from './cartProducts.js'
 import OrderDetail from './order_detail.js'
+import User from './user.js'
 
 export default class Product extends BaseModel {
   @column({ isPrimary: true })
@@ -31,6 +32,9 @@ export default class Product extends BaseModel {
   @column()
   declare collectionId: number
 
+  @column()
+  declare ownerByUserId: boolean
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
@@ -39,6 +43,9 @@ export default class Product extends BaseModel {
 
   @belongsTo(() => Collection)
   declare collection: BelongsTo<typeof Collection>
+
+  @belongsTo(() => User)
+  declare user: BelongsTo<typeof User>
 
   @hasMany(() => OrderDetail)
   declare orderDetails: HasMany<typeof OrderDetail>

@@ -2,32 +2,63 @@ import Order from '#models/order'
 import OrderDetail from '#models/order_detail'
 import Product from '#models/product'
 import User from '#models/user'
+import db from '@adonisjs/lucid/services/db'
 
 export default class OrderService {
   async createOrder(data: any) {
-    const { description, payment_method, user_id, total_price, cart_items } = data
+    const { user_id, total_price, cart_items } = data
 
-    const user = await User.findOrFail(user_id)
+    return await db.transaction(async (trx) => {
+      const user = await User.findByOrFail('id', user_id, {
+        client: trx,
+      })
 
-    const order = new Order()
-    order.description = description
-    order.paymentMethod = payment_method
-    order.totalPrice = total_price
-    order.userId = user_id
-    await order.save()
-    const listOrderDetail = []
-    for (const cartItem of cart_items) {
-      const orderDetail = new OrderDetail()
-      const productId = cartItem.product_id
-      const quantity = cartItem.quantity
-      const product = await Product.findOrFail(productId)
-      orderDetail.orderId = order.id
-      orderDetail.productId = productId
-      orderDetail.numberProduct = quantity
-      orderDetail.price = product.price
-      listOrderDetail.push(orderDetail)
-    }
-    await OrderDetail.createMany(listOrderDetail)
-    return order
+      if (user.walletBalance < total_price) {
+        throw new Error('Not enough money')
+      }
+
+      await user
+        .merge({
+          walletBalance: Number(user.walletBalance) - Number(total_price),
+        })
+        .save()
+
+      const cart = await user.related('cart').query().firstOrFail()
+
+      await cart.related('products').detach([], trx)
+
+      const order = new Order()
+      order.description = ''
+      order.paymentMethod = 'online'
+      order.totalPrice = total_price
+      order.userId = user_id
+
+      order.useTransaction(trx)
+      await order.save()
+      const listOrderDetail = []
+      for (const cartItem of cart_items) {
+        const orderDetail = new OrderDetail()
+        const productId = cartItem.product_id
+        const quantity = cartItem.quantity
+        const product = await Product.findOrFail(productId, { client: trx })
+        await product
+          .merge({
+            ownerByUserId: user_id,
+          })
+          .save()
+        orderDetail.orderId = order.id
+        orderDetail.productId = productId
+        orderDetail.numberProduct = quantity
+        orderDetail.price = product.price
+        listOrderDetail.push(orderDetail)
+      }
+      await OrderDetail.createMany(listOrderDetail, {
+        client: trx,
+      })
+
+      return {
+        walletBalance:user.walletBalance
+      }
+    })
   }
 }

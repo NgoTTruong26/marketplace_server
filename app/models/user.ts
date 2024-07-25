@@ -6,6 +6,7 @@ import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
 import parseDuration from 'parse-duration'
 import Cart from './cart.js'
+import Product from './product.js'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -37,6 +38,9 @@ export default class User extends BaseModel {
 
   @hasMany(() => Order)
   declare orders: HasMany<typeof Order>
+
+  @hasMany(() => Product)
+  declare products: HasMany<typeof Product>
 
   static accessTokens = JwtAccessTokenProvider.forModel(User, {
     expiresInMillis: parseDuration('1 day')!,

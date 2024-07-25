@@ -24,7 +24,10 @@ export default class OrdersController {
     try {
       const orderDTO = await createOrderValidator.validate(ctx.request.all())
 
-      const order = await this.orderService.createOrder(orderDTO)
+      const order = await this.orderService.createOrder({
+        user_id: ctx.auth.user!.id,
+        ...orderDTO,
+      })
       ctx.response.status(HttpStatusCode.CREATED).send({
         message: 'Order created',
         data: order,
@@ -36,7 +39,7 @@ export default class OrdersController {
         })
       } else {
         ctx.response.status(HttpStatusCode.BAD_REQUEST).send({
-          message: 'Order not found',
+          message: error.message,
           error: error.messages,
         })
       }
