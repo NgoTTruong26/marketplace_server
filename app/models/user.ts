@@ -1,6 +1,8 @@
+import Collection from '#models/collection'
 import Order from '#models/order'
 import Profile from '#models/profile'
 import { JwtAccessTokenProvider, JwtSecret } from '#providers/jwt_access_token.provider'
+import env from '#start/env'
 import { BaseModel, column, hasMany, hasOne } from '@adonisjs/lucid/orm'
 import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
@@ -39,12 +41,15 @@ export default class User extends BaseModel {
   @hasMany(() => Order)
   declare orders: HasMany<typeof Order>
 
+  @hasMany(() => Collection)
+  declare collections: HasMany<typeof Collection>
+
   @hasMany(() => Product)
   declare products: HasMany<typeof Product>
 
   static accessTokens = JwtAccessTokenProvider.forModel(User, {
     expiresInMillis: parseDuration('1 day')!,
-    key: new JwtSecret('BjBZ-s9JFJTBwUsOo1Ml-fzkCqja_byX'),
+    key: new JwtSecret(env.get('SECRET_KEY')),
     primaryKey: 'id',
     algorithm: 'HS256',
     audience: 'http://localhost:5173',

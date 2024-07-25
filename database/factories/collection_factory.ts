@@ -8,7 +8,6 @@ export const CollectionFactory = factory
       description: faker.lorem.sentence(),
       isDeleted: false,
       categoryId: faker.number.int({ min: 1, max: 6 }),
-      profileId: faker.number.int({ min: 1, max: 3 }),
       imageUrl:
         'https://i.seadn.io/s/raw/files/572cdff4974eb0952fd2a22ee6c57014.jpg?auto=format&dpr=1&w=384',
       bannerUrl:

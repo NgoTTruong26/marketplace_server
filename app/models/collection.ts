@@ -1,5 +1,6 @@
 import Category from '#models/category'
 import Product from '#models/product'
+import User from '#models/user'
 
 import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
@@ -28,6 +29,9 @@ export default class Collection extends BaseModel {
   @column({ columnName: 'category_id' })
   declare categoryId: number
 
+  @column()
+  declare createdByUserId: number
+
   @column({ columnName: 'profile_id' })
   declare profileId: number
 
@@ -45,6 +49,9 @@ export default class Collection extends BaseModel {
 
   @belongsTo(() => Category)
   declare category: BelongsTo<typeof Category>
+
+  @belongsTo(() => User)
+  declare user: BelongsTo<typeof User>
 
   @belongsTo(() => Profile)
   declare profile: BelongsTo<typeof Profile>

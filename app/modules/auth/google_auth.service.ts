@@ -8,6 +8,7 @@ export default class GoogleAuthsService {
 
     if (user) {
       //create token
+      // eslint-disable-next-line unicorn/no-await-expression-member
       const accessToken = (await User.accessTokens.create(user)).value?.release() || ''
 
       return { user, accessToken: accessToken }

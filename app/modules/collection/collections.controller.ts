@@ -60,11 +60,11 @@ export default class CollectionsController {
 
       if (
         !fileImage ||
-        fileImage.tmpPath == null ||
-        fileImage.tmpPath == undefined ||
+        fileImage.tmpPath === null ||
+        fileImage.tmpPath === undefined ||
         !fileBanner ||
-        fileBanner.tmpPath == null ||
-        fileBanner.tmpPath == undefined
+        fileBanner.tmpPath === null ||
+        fileBanner.tmpPath === undefined
       ) {
         throw new InvalidImageException('Invalid file path')
       }
@@ -181,11 +181,11 @@ export default class CollectionsController {
 
       if (
         !fileImage ||
-        fileImage.tmpPath == null ||
-        fileImage.tmpPath == undefined ||
+        fileImage.tmpPath === null ||
+        fileImage.tmpPath === undefined ||
         !fileBanner ||
-        fileBanner.tmpPath == null ||
-        fileBanner.tmpPath == undefined
+        fileBanner.tmpPath === null ||
+        fileBanner.tmpPath === undefined
       ) {
         throw new InvalidImageException('Invalid file path')
       }
@@ -217,6 +217,47 @@ export default class CollectionsController {
           message: 'UPDATE COLLECTION IMAGE FAILED',
         })
       }
+    }
+  }
+  async getInforUser(ctx: HttpContext) {
+    try {
+      const data = await this.collectionService.getUser(ctx.params.id)
+      ctx.response.status(200).send({
+        data: data,
+      })
+    } catch (error) {
+      ctx.response.status(HttpStatusCode.NOT_FOUND).send({
+        message: 'GET USER FAILED',
+      })
+    }
+  }
+
+  async getCollectionByUserId(ctx: HttpContext) {
+    try {
+      const listCollections = await this.collectionService.getCollectionByUserId(ctx.params.id)
+
+      // console.log(listCollections)
+      // console.log(ctx.params.id)
+      ctx.response.status(HttpStatusCode.OK).send({
+        message: 'Success',
+        collections: listCollections,
+      })
+    } catch (error) {
+      ctx.response.status(HttpStatusCode.NOT_FOUND).send({
+        message: 'Collections not found',
+      })
+    }
+  }
+  async deleteCollectionByUser(ctx: HttpContext) {
+    try {
+      await this.collectionService.deleteCollectionByUser(ctx.params.userId, ctx.params.id)
+      ctx.response.status(HttpStatusCode.OK).send({
+        message: 'Deleted successfully',
+      })
+    } catch (error) {
+      ctx.response.status(HttpStatusCode.NOT_FOUND).send({
+        message: 'Delete failed',
+      })
     }
   }
 }

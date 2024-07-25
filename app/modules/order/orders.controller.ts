@@ -46,6 +46,34 @@ export default class OrdersController {
     }
   }
 
+  async getProductIsBuyedByUser(ctx: HttpContext) {
+    try {
+      const listProducts = await this.orderService.getProductIsBuyed(ctx.params.id)
+      ctx.response.status(HttpStatusCode.OK).send({
+        message: 'successful',
+        data: listProducts,
+      })
+    } catch (error) {
+      ctx.response.status(HttpStatusCode.BAD_REQUEST).send({
+        message: 'Cannot get product is buyed by user',
+      })
+    }
+  }
+
+  async getOrderByUser(ctx: HttpContext) {
+    try {
+      const listOrders = await this.orderService.getOrderByUserId(ctx.params.id)
+      ctx.response.status(HttpStatusCode.OK).send({
+        message: 'successful',
+        orders: listOrders,
+      })
+    } catch (error) {
+      ctx.response.status(HttpStatusCode.BAD_REQUEST).send({
+        message: 'Cannot get order by user',
+      })
+    }
+  }
+
   /**
    * Show individual record
    */

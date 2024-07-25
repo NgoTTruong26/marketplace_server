@@ -1,4 +1,5 @@
 import Collection from '#models/collection'
+import db from '@adonisjs/lucid/services/db'
 import { Pagination } from '../../types/pagination.js'
 
 export default class CollectionsService {
@@ -25,7 +26,11 @@ export default class CollectionsService {
   }
 
   async getCollectionById(id: number) {
-    return Collection.query().where('id', id).andWhere('isDeleted', false).preload("profile").firstOrFail()
+    return Collection.query()
+      .where('id', id)
+      .andWhere('isDeleted', false)
+      .preload('profile')
+      .firstOrFail()
   }
 
   async deleteCollection(id: number) {
@@ -47,5 +52,38 @@ export default class CollectionsService {
     collection.merge(data)
     await collection.save()
     return collection
+  }
+  async getUser(collectionId: number) {
+    const result = await db.rawQuery(
+      'SELECT DISTINCT p.* FROM users u join collections c on u.id = c.created_by_user_id join profiles p on u.id = p.user_id where c.id = ?',
+      [collectionId]
+    )
+    return result.rows
+  }
+
+  async getCollectionByUserId(userId: number) {
+    const result = await db.rawQuery(
+      'SELECT * FROM collections WHERE created_by_user_id = ? AND is_deleted = false',
+      [userId]
+    )
+
+    return result.rows
+  }
+
+  async deleteCollectionByUser(userId: number, collectionId: number) {
+    const collection = await Collection.query()
+      .where('id', collectionId)
+      .andWhere('created_by_user_id', userId)
+      .andWhere('isDeleted', false)
+      .firstOrFail()
+
+    collection.isDeleted = true
+    await collection.save()
+
+    const products = await collection.related('products').query().where('isDeleted', false)
+    for (const product of products) {
+      product.isDeleted = true
+      await product.save()
+    }
   }
 }

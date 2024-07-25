@@ -56,11 +56,49 @@ router
     match: /^[0-9]+$/,
     cast: (value) => Number(value),
   })
+router.get('collections/infor-user/:id', [CollectionsController, 'getInforUser']).where('id', {
+  match: /^[0-9]+$/,
+  cast: (value) => Number(value),
+})
+router.get('collections/users/:id', [CollectionsController, 'getCollectionByUserId']).where('id', {
+  match: /^[0-9]+$/,
+  cast: (value) => Number(value),
+})
+router
+  .delete('users/:userId/collections/:id', [CollectionsController, 'deleteCollectionByUser'])
+  .where('id', {
+    match: /^[0-9]+$/,
+    cast: (value) => Number(value),
+  })
+  .where('userId', {
+    match: /^[0-9]+$/,
+    cast: (value) => Number(value),
+  })
 
 //Products resource
 router.resource('products', ProductsController).except(['index']).apiOnly()
 router.get('products', [ProductsController, 'index']).use(middleware.pagination())
 router.put('products/upload-image/:id', [ProductsController, 'uploadProductImage']).where('id', {
+  match: /^[0-9]+$/,
+  cast: (value) => Number(value),
+})
+
+router.get('/products/users/:id', [ProductsController, 'getProductCreatedByUser']).where('id', {
+  match: /^[0-9]+$/,
+  cast: (value) => Number(value),
+})
+
+//Order resource
+router.resource('orders', OrdersController).apiOnly()
+
+router
+  .get('/orders/users/products/:id', [OrdersController, 'getProductIsBuyedByUser'])
+  .where('id', {
+    match: /^[0-9]+$/,
+    cast: (value) => Number(value),
+  })
+
+router.get('/orders/users/:id', [OrdersController, 'getOrderByUser']).where('id', {
   match: /^[0-9]+$/,
   cast: (value) => Number(value),
 })
