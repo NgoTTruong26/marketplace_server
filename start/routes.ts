@@ -41,12 +41,14 @@ router.get('/', (ctx: HttpContext) => {
 // })
 
 //Categories resource
-router.post('/categories', [CategoriesController, 'store'])
-router.get('/categories', [CategoriesController, 'index'])
+router.resource('categories', CategoriesController).apiOnly()
+// router.post('/categories', [CategoriesController, 'store'])
+// router.get('/categories', [CategoriesController, 'index'])
 
 //Collections resource
+router.resource('collections', CollectionsController).except(['index']).apiOnly()
 router.get('collections', [CollectionsController, 'index']).use(middleware.pagination())
-router.get('collections/:id', [CollectionsController, 'show'])
+// router.get('collections/:id', [CollectionsController, 'show'])
 router
   .get('/top-collections', [CollectionsController, 'getTopCollections'])
   .use(middleware.pagination())

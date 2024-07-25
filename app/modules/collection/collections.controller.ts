@@ -83,6 +83,8 @@ export default class CollectionsController {
 
       const data = await this.collectionService.createCollection({
         ...payload,
+        created_by_user_id: Number(payload.created_by_user_id),
+        profile_id: Number(payload.profile_id),
         image_url: resultImage.url,
         banner_url: resultBanner.url,
       })
@@ -92,6 +94,8 @@ export default class CollectionsController {
         data: data,
       })
     } catch (error) {
+      console.log(error)
+
       response.status(HttpStatusCode.BAD_REQUEST).send({
         messages: 'INSERT COLLECTIONS FAILED',
         error: error.messages,

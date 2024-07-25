@@ -7,6 +7,7 @@ export const createCollectionsValidator = vine.compile(
     description: vine.string().trim().minLength(3).maxLength(100),
     total_volume: vine.number().min(1),
     category_id: vine.number().min(1),
-    created_by_user_id: vine.number().min(1),
+    created_by_user_id: vine.string(),
+    profile_id: vine.string(),
   })
 )

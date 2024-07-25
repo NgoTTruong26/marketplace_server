@@ -16,21 +16,43 @@ export default class CollectionsService {
 
   async getAllCollections(data: any) {
     const { page, keyword, limit } = data
-    return await Collection.query()
+    const result = await Collection.query()
       .where('isDeleted', false)
       .andWhere((builder) => {
-        builder.where('name', 'like', `%${keyword}%`).orWhere('description', 'like', `%${keyword}%`)
+        builder.where('name', 'like', `%${keyword}%`)
       })
-      .orderBy('id', 'asc')
+      .withCount('products', (query) => {
+        query.as('totalProducts')
+      })
+      .orderBy('totalVolume', 'desc')
       .paginate(page, limit)
+
+    const collections = result.toJSON()
+
+    collections.data = collections.data.map((collection) => {
+      const totalProducts = Number(collection.$extras.totalProducts)
+      return { ...collection.serialize(), totalProducts }
+    })
+
+    return collections
   }
 
   async getCollectionById(id: number) {
-    return Collection.query()
+    const collection = await Collection.query()
       .where('id', id)
       .andWhere('isDeleted', false)
       .preload('profile')
+      .withCount('products', (query) => {
+        query.as('totalProducts')
+      })
       .firstOrFail()
+
+    const totalProducts = Number(collection.$extras.totalProducts)
+
+    return {
+      ...collection.serialize(),
+      totalProducts,
+    }
   }
 
   async deleteCollection(id: number) {
