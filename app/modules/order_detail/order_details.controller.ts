@@ -81,6 +81,20 @@ export default class OrderDetailsController {
     }
   }
 
+  async getListOrderDetailByOrderId(ctx: HttpContext) {
+    try {
+      const data = await this.orderDetailService.getListOrderDetailByOrderId(ctx.params.id)
+      ctx.response.status(HttpStatusCode.OK).send({
+        message: 'Order detail by order id',
+        products: data,
+      })
+    } catch (error) {
+      ctx.response.status(HttpStatusCode.BAD_REQUEST).send({
+        message: 'Cannot get order detail by order id',
+      })
+    }
+  }
+
   /**
    * Delete record
    */

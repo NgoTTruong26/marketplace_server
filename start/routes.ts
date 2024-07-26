@@ -108,6 +108,13 @@ router.get('/orders/users/:id', [OrdersController, 'getOrderByUser']).where('id'
 //order_detail resource
 router.resource('order-details', OrderDetailsController).apiOnly()
 
+router
+  .get('/order-details/orders/:id', [OrderDetailsController, 'getListOrderDetailByOrderId'])
+  .where('id', {
+    match: /^[0-9]+$/,
+    cast: (value) => Number(value),
+  })
+
 //google Auth
 router.post('/auth/user/google', [GoogleAuthsController, 'googleAuth'])
 

@@ -28,4 +28,23 @@ export default class OrderDetailService {
     await orderDetail.save()
     return orderDetail
   }
+
+  async getListOrderDetailByOrderId(orderId: number) {
+    const listOrderDetails = await OrderDetail.query().where('order_id', orderId)
+    const listNumberProduct = listOrderDetails.map((orderDetail) => orderDetail.numberProduct)
+    const listProducts = await Product.query().whereIn(
+      'id',
+      listOrderDetails.map((orderDetail) => orderDetail.productId)
+    )
+    // return listNumberProduct
+    let result = []
+    for (let i = 0; i < listProducts.length; i++) {
+      const x = {
+        ...listProducts[i].toJSON(),
+        numberProduct: listNumberProduct[i],
+      }
+      result.push(x)
+    }
+    return result
+  }
 }
