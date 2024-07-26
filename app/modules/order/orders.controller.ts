@@ -24,7 +24,7 @@ export default class OrdersController {
     try {
       const orderDTO = await createOrderValidator.validate(ctx.request.all())
 
-      const order = await this.orderService.createOrder({
+      const order = await this.orderService.createOrderFromCart({
         user_id: ctx.auth.user!.id,
         ...orderDTO,
       })

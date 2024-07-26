@@ -5,7 +5,7 @@ import User from '#models/user'
 import db from '@adonisjs/lucid/services/db'
 
 export default class OrderService {
-  async createOrder(data: any) {
+  async createOrderFromCart(data: any) {
     const { user_id, total_price, cart_items } = data
 
     return await db.transaction(async (trx) => {
@@ -57,7 +57,7 @@ export default class OrderService {
       })
 
       return {
-        walletBalance:user.walletBalance
+        walletBalance: user.walletBalance,
       }
     })
   }

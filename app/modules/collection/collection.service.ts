@@ -1,25 +1,43 @@
 import Collection from '#models/collection'
 import db from '@adonisjs/lucid/services/db'
-import { Pagination } from '../../types/pagination.js'
+import { GetCollectionsDTO } from './dto/getCollections.dto.js'
 
 export default class CollectionsService {
   async createCollection(data: any) {
     return Collection.create(data)
   }
 
-  async getTopCollections(data: Pagination) {
-    return await Collection.query()
-      .preload('profile')
-      .orderBy('totalVolume', 'desc')
-      .limit(data.limit)
-  }
-
-  async getAllCollections(data: any) {
-    const { page, keyword, limit } = data
+  async getTopCollections(data: GetCollectionsDTO) {
     const result = await Collection.query()
       .where('isDeleted', false)
       .andWhere((builder) => {
-        builder.where('name', 'like', `%${keyword}%`)
+        if (Number(data.categoryId)) {
+          builder.where('categoryId', Number(data.categoryId))
+        }
+      })
+      .preload('profile')
+      .withCount('products', (query) => {
+        query.as('totalProducts')
+      })
+      .orderBy('totalVolume', 'desc')
+      .limit(data.limit)
+
+    return result.map((collection) => {
+      const totalProducts = Number(collection.$extras.totalProducts)
+      return { ...collection.serialize(), totalProducts }
+    })
+  }
+
+  async getAllCollections(data: any) {
+    const { page, keyword, limit, categoryId } = data
+    const result = await Collection.query()
+      .where('isDeleted', false)
+      .andWhere((builder) => {
+        builder.whereRaw('LOWER(name) LIKE LOWER(?)', [`%${keyword}%`])
+
+        if (Number(categoryId)) {
+          builder.where('categoryId', Number(categoryId))
+        }
       })
       .withCount('products', (query) => {
         query.as('totalProducts')

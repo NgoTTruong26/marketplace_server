@@ -33,7 +33,7 @@ export default class Product extends BaseModel {
   declare collectionId: number
 
   @column()
-  declare ownerByUserId: boolean
+  declare ownerByUserId: number
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

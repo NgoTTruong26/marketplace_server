@@ -6,25 +6,29 @@ import { GetProductListFromCartDto } from './dto/get_product_list_from_cart.dto.
 
 export default class ProductService {
   async getAllProducts(data: any) {
-    const { page, limit, keyword, sort, collectionId } = data
-    if (sort === '-price') {
-      return await Product.query()
-        .where('isDeleted', false)
-        .andWhere((builder) => {
-          builder
-            .where('name', 'like', `%${keyword}%`)
-            .orWhere('description', 'like', `%${keyword}%`)
-        })
-        .orderBy('price', 'desc')
-        .paginate(page, limit)
-    }
+    const { page, limit, collectionId, keyword, sort, minPrice, maxPrice, userId, sortedBy } = data
+
     return await Product.query()
       .where('collectionId', collectionId)
       .andWhere('isDeleted', false)
       .andWhere((builder) => {
-        builder.where('name', 'like', `%${keyword}%`).orWhere('description', 'like', `%${keyword}%`)
+        builder.whereRaw('LOWER(name) LIKE LOWER(?)', [`%${keyword}%`])
+
+        if (userId) {
+          builder.where('ownerByUserId', userId)
+        }
+        if (Number(minPrice) && Number(maxPrice)) {
+          builder.where('price', '>', minPrice).andWhere('price', '<', maxPrice)
+        }
+        if (Number(minPrice)) {
+          builder.where('price', '>', minPrice)
+        }
+        if (Number(maxPrice)) {
+          builder.where('price', '<', maxPrice)
+        }
       })
-      .orderBy('id', 'asc')
+
+      .orderBy(sortedBy ? 'price' : sort, sortedBy ? sortedBy : 'asc')
       .paginate(page, limit)
   }
 

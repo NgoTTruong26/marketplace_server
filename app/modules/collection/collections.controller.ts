@@ -20,7 +20,10 @@ export default class CollectionsController {
    */
   async index(ctx: HttpContext) {
     try {
-      const data = await this.collectionService.getAllCollections(ctx.pagination)
+      const data = await this.collectionService.getAllCollections({
+        categoryId: ctx.request.qs().categoryId,
+        ...ctx.pagination,
+      })
       ctx.response.status(HttpStatusCode.OK).send(data)
     } catch (error) {
       if (error instanceof errors.E_ROW_NOT_FOUND) {
@@ -37,7 +40,10 @@ export default class CollectionsController {
    */
   async getTopCollections(ctx: HttpContext) {
     try {
-      const data = await this.collectionService.getTopCollections(ctx.pagination)
+      const data = await this.collectionService.getTopCollections({
+        categoryId: ctx.request.qs().categoryId,
+        ...ctx.pagination,
+      })
 
       return ctx.response.status(HttpStatusCode.OK).send({
         message: 'List of top collections',

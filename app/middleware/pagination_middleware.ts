@@ -14,7 +14,7 @@ export default class PaginationMiddleware {
       page: parseInt(request.input('page', 1)),
       limit: parseInt(request.input('limit', 20)),
       keyword: request.input('keyword', ''),
-      sort: request.input('sort', 'price'),
+      sort: request.input('sort', 'id'),
     }
     ctx.pagination = pagination
 
