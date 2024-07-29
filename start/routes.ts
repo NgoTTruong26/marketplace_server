@@ -137,6 +137,7 @@ router
         router.post('', [CartsController, 'addProductToCart'])
         router.patch('/change-quantity-product', [CartsController, 'changeQuantityProductFromCart'])
         router.delete('', [CartsController, 'removeProductFromCart'])
+        router.delete('/all', [CartsController, 'removeAllProductFromCart'])
       })
       .prefix('cart')
     router.get('products-from-cart', [ProductsController, 'getProductsFromCart'])

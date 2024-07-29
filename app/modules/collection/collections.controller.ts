@@ -42,6 +42,7 @@ export default class CollectionsController {
     try {
       const data = await this.collectionService.getTopCollections({
         categoryId: ctx.request.qs().categoryId,
+        sortedBy: ctx.request.qs().sortedBy,
         ...ctx.pagination,
       })
 
@@ -246,8 +247,6 @@ export default class CollectionsController {
     try {
       const listCollections = await this.collectionService.getCollectionByUserId(ctx.params.id)
 
-      // console.log(listCollections)
-      // console.log(ctx.params.id)
       ctx.response.status(HttpStatusCode.OK).send({
         message: 'Success',
         collections: listCollections,

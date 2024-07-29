@@ -2,8 +2,8 @@ import Category from '#models/category'
 
 export default class CategoryService {
   async createCategory(data: any) {
-    //return Category.create(data)
-    return Category.createMany([
+    return Category.create(data)
+    /* return Category.createMany([
       {
         name: 'art',
       },
@@ -22,7 +22,7 @@ export default class CategoryService {
       {
         name: 'music',
       },
-    ])
+    ]) */
   }
 
   async getAllCatrgories() {

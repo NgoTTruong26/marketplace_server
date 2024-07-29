@@ -15,11 +15,16 @@ export default class CollectionsService {
           builder.where('categoryId', Number(data.categoryId))
         }
       })
+      .if(data.sortedBy === 'floor', (query) => {
+        query.orderBy('floorPrice', 'desc')
+      })
+      .if(data.sortedBy === 'volume', (query) => {
+        query.orderBy('totalVolume', 'desc')
+      })
       .preload('profile')
       .withCount('products', (query) => {
         query.as('totalProducts')
       })
-      .orderBy('totalVolume', 'desc')
       .limit(data.limit)
 
     return result.map((collection) => {

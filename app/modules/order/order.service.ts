@@ -3,15 +3,50 @@ import OrderDetail from '#models/order_detail'
 import Product from '#models/product'
 import User from '#models/user'
 import db from '@adonisjs/lucid/services/db'
+import { CreateOrderDto } from './dto/create_order.dto.js'
 
 export default class OrderService {
-  async createOrderFromCart(data: any) {
-    const { user_id, total_price, cart_items } = data
+  async createOrderFromCart(data: CreateOrderDto) {
+    const { user_id, cart_items } = data
 
     return await db.transaction(async (trx) => {
       const user = await User.findByOrFail('id', user_id, {
         client: trx,
       })
+
+      const total_price = (
+        await Promise.all(
+          cart_items.map(async (item) => {
+            const product = await Product.query({
+              client: trx,
+            })
+              .where('id', item.product_id)
+              .andWhere('isDeleted', false)
+              .andWhere('quantity', '>', item.quantity)
+              .first()
+
+            if (!product) {
+              throw new Error('Product does not have enough quantity.')
+            }
+
+            await product
+              .merge({
+                quantity: product.quantity - item.quantity,
+              })
+              .save()
+
+            return {
+              product,
+              quantity: item.quantity,
+            }
+          })
+        )
+      ).reduce((prevs: number, curr) => {
+        if (curr.product.price) {
+          return (prevs += curr.product.price * curr.quantity)
+        }
+        return prevs
+      }, 0)
 
       if (user.walletBalance < total_price) {
         throw new Error('Not enough money')

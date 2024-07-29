@@ -30,12 +30,26 @@ export default class CartsController {
 
   async removeProductFromCart(ctx: HttpContext) {
     try {
-      const data = await this.cartService.removeProductFromCart({
+      const data = await this.cartService.removeProductFromCart(ctx.auth.user!.id, {
         productId: ctx.request.body().productId,
-        cartId: ctx.request.body().cartId,
       })
       ctx.response.status(HttpStatusCode.CREATED).send({
         message: 'Remove product from cart successfully',
+        data: data,
+      })
+    } catch (error) {
+      ctx.response.status(HttpStatusCode.BAD_REQUEST).send({
+        message: error.message,
+        error: error.messages,
+      })
+    }
+  }
+
+  async removeAllProductFromCart(ctx: HttpContext) {
+    try {
+      const data = await this.cartService.removeAllProductFromCart(ctx.auth.user!.id)
+      ctx.response.status(HttpStatusCode.CREATED).send({
+        message: 'Remove all product from cart successfully',
         data: data,
       })
     } catch (error) {

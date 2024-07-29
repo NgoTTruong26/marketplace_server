@@ -28,8 +28,6 @@ export default class ProductsController {
         throw new Error()
       }
 
-      console.log(ctx.request.qs(), ctx.pagination)
-
       const listProducts = await this.productService.getAllProducts({
         userId: ctx.request.qs().userId,
         collectionId,

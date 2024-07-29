@@ -21,11 +21,25 @@ export default class CartService {
     }
   }
 
-  async removeProductFromCart({ cartId, productId }: RemoveProductFromCartDto) {
+  async removeProductFromCart(userId: number, { productId }: RemoveProductFromCartDto) {
+    const cartId = (await Cart.findByOrFail('userId', userId)).id
+
     const cartProduct = await CartProduct.query()
       .where({
         cartId,
         productId,
+      })
+      .delete()
+
+    return cartProduct
+  }
+
+  async removeAllProductFromCart(userId: number) {
+    const cartId = (await Cart.findByOrFail('userId', userId)).id
+
+    const cartProduct = await CartProduct.query()
+      .where({
+        cartId,
       })
       .delete()
 
