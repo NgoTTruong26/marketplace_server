@@ -81,11 +81,12 @@ export default class ProductsController {
 
       const resultImage = await CloudinaryService.upload(productImage.tmpPath)
       const image_url = resultImage.url
+      const produdct = await
       this.productService.createProduct({ ...data, image_url })
 
       ctx.response.status(HttpStatusCode.CREATED).send({
         message: 'Product created successfully',
-        data: data,
+        data: produdct,
       })
     } catch (error) {
       if (error instanceof InvalidImageException) {
