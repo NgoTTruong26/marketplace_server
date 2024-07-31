@@ -44,7 +44,9 @@ export default class Product extends BaseModel {
   @belongsTo(() => Collection)
   declare collection: BelongsTo<typeof Collection>
 
-  @belongsTo(() => User)
+  @belongsTo(() => User, {
+    foreignKey: 'ownerByUserId',
+  })
   declare user: BelongsTo<typeof User>
 
   @hasMany(() => OrderDetail)
@@ -54,11 +56,11 @@ export default class Product extends BaseModel {
   declare cartProduct: BelongsTo<typeof CartProduct>
 
   @manyToMany(() => Cart, {
-    pivotTable: 'cart_products', // Tên bảng trung gian
-    localKey: 'id', // Khóa chính của Product
-    pivotForeignKey: 'product_id', // Khóa ngoại trong bảng trung gian đại diện cho Product
-    relatedKey: 'id', // Khóa chính của Cart
-    pivotRelatedForeignKey: 'cart_id', // Khóa ngoại trong bảng trung gian đại diện cho Cart
+    pivotTable: 'cart_products',
+    localKey: 'id',
+    pivotForeignKey: 'product_id',
+    relatedKey: 'id',
+    pivotRelatedForeignKey: 'cart_id',
   })
   declare carts: ManyToMany<typeof Cart>
 }

@@ -30,6 +30,11 @@ export default class OrderService {
             }
 
             await product
+              .related('user')
+              .query()
+              .increment('walletBalance', product.price * item.quantity)
+
+            await product
               .merge({
                 quantity: product.quantity - item.quantity,
               })
@@ -76,11 +81,6 @@ export default class OrderService {
         const productId = cartItem.product_id
         const quantity = cartItem.quantity
         const product = await Product.findOrFail(productId, { client: trx })
-        await product
-          .merge({
-            ownerByUserId: user_id,
-          })
-          .save()
         orderDetail.orderId = order.id
         orderDetail.productId = productId
         orderDetail.numberProduct = quantity

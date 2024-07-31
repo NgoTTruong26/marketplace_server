@@ -69,7 +69,7 @@ export default class ProductService {
       if (collection.floorPrice === 0 || collection.floorPrice > product.price) {
         collection.floorPrice = product.price
       }
-      collection.totalVolume += product.price
+      collection.totalVolume += product.price * product.quantity
 
       await collection.save()
 
