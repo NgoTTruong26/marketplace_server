@@ -62,14 +62,9 @@ router
 
 //Collections resource
 
-
-
 // router.get('collections/:id', [CollectionsController, 'show'])
 
-
-
 //Products resource
-
 
 //Order resource
 

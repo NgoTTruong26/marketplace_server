@@ -22,7 +22,7 @@ export default class OrderService {
             })
               .where('id', item.product_id)
               .andWhere('isDeleted', false)
-              .andWhere('quantity', '>', item.quantity)
+              .andWhere('quantity', '>=', item.quantity)
               .first()
 
             if (!product) {
