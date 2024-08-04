@@ -48,8 +48,17 @@ export default class User extends BaseModel {
   declare products: HasMany<typeof Product>
 
   static accessTokens = JwtAccessTokenProvider.forModel(User, {
-    expiresInMillis: parseDuration('1 day')!,
-    key: new JwtSecret(env.get('SECRET_KEY')),
+    expiresInMillis: parseDuration('30 m')!,
+    key: new JwtSecret(env.get('ACCESS_SECRET_KEY')),
+    primaryKey: 'id',
+    algorithm: 'HS256',
+    audience: 'http://localhost:5173',
+    issuer: 'http://localhost:3333',
+  })
+
+  static refreshTokens = JwtAccessTokenProvider.forModel(User, {
+    expiresInMillis: parseDuration('3 day')!,
+    key: new JwtSecret(env.get('REFRESH_SECRET_KEY')),
     primaryKey: 'id',
     algorithm: 'HS256',
     audience: 'http://localhost:5173',

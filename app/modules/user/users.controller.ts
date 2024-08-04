@@ -1,15 +1,12 @@
-
-
+import CloudinaryService from '#services/CloudinaryService'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import { UpdateProfileDTO } from './dto/update_profile.dto.js'
 import UsersService from './user.service.js'
-import CloudinaryService from '#services/CloudinaryService'
 
 @inject()
 export default class UsersController {
-  constructor(private usersService: UsersService
-  ) {}
+  constructor(private usersService: UsersService) {}
   async getProfile(ctx: HttpContext) {
     const user = ctx.auth.user
     await user?.load('cart', (builder) =>
@@ -34,7 +31,7 @@ export default class UsersController {
     const fileAvatar = ctx.request.file('avatar')
     const fileBanner = ctx.request.file('banner')
     const updateData = {
-      ...ctx.request.body()
+      ...ctx.request.body(),
     }
     if (fileAvatar && fileAvatar.tmpPath !== null && fileAvatar.tmpPath !== undefined) {
       const avatar = await CloudinaryService.upload(fileAvatar.tmpPath)

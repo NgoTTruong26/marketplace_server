@@ -4,4 +4,5 @@ import { Secret } from '@adonisjs/core/helpers'
 export default interface IGoogleAuth {
   user: User
   accessToken: string | Secret<string>
+  refreshToken: string | Secret<string>
 }

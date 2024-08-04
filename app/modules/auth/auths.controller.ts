@@ -2,14 +2,14 @@ import env from '#start/env'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import { OAuth2Client } from 'google-auth-library'
+import AuthsService from './auth.service.js'
 import { GoogleAuthsDto } from './dto/google_auth.dto.js'
-import GoogleAuthsService from './google_auth.service.js'
 
 @inject()
-export default class GoogleAuthsController {
+export default class AuthsController {
   private oAuth2Client: OAuth2Client
 
-  constructor(private googleAuthsService: GoogleAuthsService) {
+  constructor(private authsService: AuthsService) {
     this.oAuth2Client = new OAuth2Client(
       env.get('GOOGLE_CLIENT_ID'),
       env.get('GOOGLE_CLIENT_SECRET'),
@@ -34,8 +34,19 @@ export default class GoogleAuthsController {
       throw new Error('Bad request')
     }
 
-    const data = await this.googleAuthsService.googleAuth(email)
+    const { refreshToken, ...data } = await this.authsService.googleAuth(email)
 
+    return ctx.response
+      .encryptedCookie(env.get('REFRESH_TOKEN'), refreshToken, {
+        httpOnly: false,
+      })
+      .send(data)
+  }
+
+  async refreshToken(ctx: HttpContext) {
+    const data = await this.authsService.refreshToken(
+      ctx.request.encryptedCookie(env.get('REFRESH_TOKEN'))
+    )
     return ctx.response.send(data)
   }
 }

@@ -42,6 +42,7 @@ router.use([
  * the routes or the routes group.
  */
 export const middleware = router.named({
+  refreshToken: () => import('#modules/auth/middleware/refresh_token_middleware'),
   validatorUpdateProfile: () =>
     import('#modules/user/middleware/validator_update_profile_middleware'),
   pagination: () => import('#middleware/pagination_middleware'),
